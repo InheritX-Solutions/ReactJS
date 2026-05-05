@@ -1,0 +1,44 @@
+import React from 'react'
+import styles from './Order.module.scss'
+import type { Order as OrderType } from '@/types/index'
+
+interface OrderProps {
+  order: OrderType
+}
+
+export const Order: React.FC<OrderProps> = ({ order }) => {
+  const ingredients = []
+
+  for (const ingredientName in order.ingredients) {
+    ingredients.push({
+      name: ingredientName,
+      amount: order.ingredients[ingredientName as keyof typeof order.ingredients]
+    })
+  }
+
+  const ingredientOutput = ingredients.map(ig => {
+    return (
+      <span
+        style={{
+          textTransform: 'capitalize',
+          display: 'inline-block',
+          margin: '0 8px',
+          border: '1px solid #ccc',
+          padding: '5px'
+        }}
+        key={ig.name}
+      >
+        {ig.name} ({ig.amount})
+      </span>
+    )
+  })
+
+  return (
+    <div className={styles.order}>
+      <p>Ingredients: {ingredientOutput}</p>
+      <p>
+        Price: <strong>USD {order.price.toFixed(2)}</strong>
+      </p>
+    </div>
+  )
+}
